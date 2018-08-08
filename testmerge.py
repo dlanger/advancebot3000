@@ -9,7 +9,8 @@ form = AdvanceForm(
     return_date=date(2018, 3, 1),
     travel_city="Orlando",
     accom_amt="1800",
-    meals_amt="999.34",
+    num_lunch=4,
+    num_dinner=2
   )
   
 rendered_form = form.render()
