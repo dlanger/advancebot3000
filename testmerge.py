@@ -1,13 +1,18 @@
-from mailmerge import MailMerge
+from advance_form import AdvanceForm
+from datetime import date
 
-import io
+form = AdvanceForm(
+    full_name='Dan Langer',
+    phone_number='(416) 999 8888',
+    trip_purpose="Advance and execute PM's visit to Latvia",
+    departure_date=date(2018, 1, 1),
+    return_date=date(2018, 3, 1),
+    travel_city="Orlando",
+    accom_amt="1800",
+    meals_amt="999.34",
+  )
+  
+rendered_form = form.render()
 
-with MailMerge('template.travel-advance.docx') as document:
-    print document.get_merge_fields()
-    document.merge(full_name='Daniel Langer')
-    
-    output = io.BytesIO()
-    document.write(output)
-
-    with open('newfoo.docx', 'w') as f:
-        f.write(output.getvalue()) 
+with open('newfoo.docx', 'w') as f:
+    f.write(rendered_form.getvalue()) 
