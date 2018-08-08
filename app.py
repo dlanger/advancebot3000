@@ -14,7 +14,7 @@ def hello():
     return "hello from Flask"
 
 @app.route("/test")
-def test_word():
+def advance_on_expenses_form():
   form = AdvanceForm(
     full_name='Dan Langer',
     phone_number='(416) 999 8888',
@@ -23,7 +23,8 @@ def test_word():
     return_date=date(2018, 3, 1),
     travel_city="Orlando",
     accom_amt="1800",
-    meals_amt="999.34",
+    num_lunch=4,
+    num_dinner=2
   )
   
   rendered_form = form.render()
