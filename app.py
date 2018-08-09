@@ -1,7 +1,7 @@
 from advance_form import AdvanceForm
 
 from flask import Flask
-from flask import send_file
+from flask import send_file, render_template
 
 from datetime import date
 
@@ -9,12 +9,14 @@ from datetime import date
 DOCX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-    return "hello from Flask"
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-@app.route("/test")
-def advance_on_expenses_form():
+@app.route("/", methods=['GET'])
+def ui():
+    return render_template('index.html')
+
+@app.route("/api/advance_form", methods=['POST'])
+def renter_advance_form():
   form = AdvanceForm(
     full_name='Dan Langer',
     phone_number='(416) 999 8888',
