@@ -10,9 +10,11 @@
 
     $(document).ready(() => {
         $('#submit-expenses').on('mdl-componentupgraded', () => {
+            const submitButton = $("#submit-expenses");
+
             $("#submit-expenses").click(() => {
                 const formElements =$("#advance-form input[type=text]");
-                let data = {};
+                let data = {}; // FIXME to const
                 let errorFlag = false;
                 
                 for (element of formElements) {
@@ -20,13 +22,14 @@
                         // alert("Error! All fields must have a value.");
                         // errorFlag = true;
                         // break;
+                        // FIXME
                     }
                     data[element.id] = element.value;
                 }
 
                 if (!errorFlag) {
                     console.log("JSON submitted => " + JSON.stringify(data));
-                    $("#submit-expenses").prop('disabled',1);
+                    submitButton.prop('disabled', 1);
 
                     let fakeData = {
                         "full_name":"James McNeil",
@@ -42,21 +45,29 @@
                         "hotel_cost":"150",
                         "hotel_nights":"2",
                         "rental_amount":"160.99",
-                        "transport":"60"
+                        "transport_amount":"60"
                     } // FIXME
 
                     data = fakeData; // FIXME
 
                     const request = new XMLHttpRequest();
                     request.open("POST", "/api/advance_form", true);
+                    request.setRequestHeader("Content-Type", "application/json");
                     request.responseType = "blob";
-                    request.onload = (event) => {
-                        const blob = request.response;
-                        const link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = downloadFilename(data) + ".docx";
-                        link.click();
-                    };
+
+                    request.addEventListener('load', (event) => {
+                        if (request.status == 200) {
+                            const blob = request.response;
+                            const link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = downloadFilename(data) + ".docx";
+                            link.click();
+                        } else {
+                            alert('Something went wront on the server (' + 
+                                request.status + ') - check your input and try again.');
+                            submitButton.prop('disabled', 0);    
+                        }
+                    });
 
                     request.send(JSON.stringify(data));
                 }
