@@ -2,14 +2,18 @@ from datetime import date, datetime
 
 from flask import Flask
 from flask import send_file, render_template, request
+from raven.contrib.flask import Sentry
 
+import settings
 from advance_form import AdvanceForm, to_decimal, round_decimal
 
-
 DOCX_MIMETYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-app = Flask(__name__)
 
-app.config['TEMPLATES_AUTO_RELOAD'] = True # FIXME
+app = Flask(__name__)
+app.config.from_object("settings")
+
+if app.config['SENTRY_DSN']:
+  Sentry(app, dsn=app.config['SENTRY_DSN'])
 
 @app.route("/", methods=['GET'])
 def ui():

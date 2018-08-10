@@ -31,24 +31,24 @@
                     console.log("JSON submitted => " + JSON.stringify(data));
                     submitButton.prop('disabled', 1);
 
-                    let fakeData = {
-                        "full_name":"James McNeil",
-                        "phone_num":"613.888.9999",
-                        "dep_date":"2017-04-01",
-                        "ret_date":"2017-05-02",
-                        "trip_purpose":"Advance PM's visit to Barrie",
-                        "travel_city":"Toronto",
-                        "num_breakfasts":"3",
-                        "num_lunches":"3",
-                        "num_dinners":"2",
-                        "num_incidentals":"1",
-                        "hotel_cost":"150",
-                        "hotel_nights":"2",
-                        "rental_amount":"160.99",
-                        "transport_amount":"60"
-                    } // FIXME
+                    // let fakeData = {
+                    //     "full_name":"James McNeil",
+                    //     "phone_num":"613.888.9999",
+                    //     "dep_date":"2017-04-01",
+                    //     "ret_date":"2017-05-02",
+                    //     "trip_purpose":"Advance PM's visit to Barrie",
+                    //     "travel_city":"Toronto",
+                    //     "num_breakfasts":"3",
+                    //     "num_lunches":"3",
+                    //     "num_dinners":"2",
+                    //     "num_incidentals":"1",
+                    //     "hotel_cost":"150",
+                    //     "hotel_nights":"2",
+                    //     "rental_amount":"160.99",
+                    //     "transport_amount":"60"
+                    // } // FIXME
 
-                    data = fakeData; // FIXME
+                    // data = fakeData; // FIXME
 
                     const request = new XMLHttpRequest();
                     request.open("POST", "/api/advance_form", true);
