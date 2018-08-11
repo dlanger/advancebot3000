@@ -62,6 +62,8 @@
                             link.href = window.URL.createObjectURL(blob);
                             link.download = downloadFilename(data) + ".docx";
                             link.click();
+                            alert('Thanks! Please submit the file that you just downloaded.')
+                            window.location.reload(true);
                         } else {
                             alert('Something went wront on the server (' + 
                                 request.status + ') - check your input and try again.');
