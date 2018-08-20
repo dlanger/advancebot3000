@@ -17,25 +17,25 @@
 
     const dateDiff = (first, second) => Math.round((second-first)/(1000*60*60*24)); // Round to "handle" DST 
     
-    const changeMdlTextField = (jqObject, val) => jqObject.get(0).parentElement.MaterialTextfield.change(val);
+    const changeMdlTextField = (formElement, val) => formElement.parentElement.MaterialTextfield.change(val);
 
-    $(document).ready(() => {
-        const submitButton = $("#submit_expenses");
+    document.addEventListener("DOMContentLoaded", () => {
+        const submitButton = document.querySelector("#submit_expenses");
         
-        submitButton.on('mdl-componentupgraded', () => {    
-            const depDateField = $("#dep_date");
-            const retDateField = $("#ret_date");
-            const bfastField = $('#num_breakfasts');
-            const lunchField = $('#num_lunches');
-            const dinnerField = $('#num_dinners');
-            const hotelNightsField = $('#hotel_nights');
+        submitButton.addEventListener('mdl-componentupgraded', () => {   
+            const depDateField = document.querySelector("#dep_date");
+            const retDateField = document.querySelector("#ret_date");
+            const bfastField = document.querySelector('#num_breakfasts');
+            const lunchField = document.querySelector('#num_lunches');
+            const dinnerField = document.querySelector('#num_dinners');
+            const hotelNightsField = document.querySelector('#hotel_nights');
 
             const dateChangeHandler = () => {
-                if ((depDateField.val() == "") || (retDateField.val() == ""))
+                if ((depDateField.value == "") || (retDateField.value == ""))
                     return;
 
-                const depDate = dateFromString(depDateField.val());
-                const retDate = dateFromString(retDateField.val());
+                const depDate = dateFromString(depDateField.value);
+                const retDate = dateFromString(retDateField.value);
                 const tripDuration = dateDiff(depDate, retDate);
 
                 if (tripDuration !== tripDuration) // Check for NaN, which happens if either value is invalid
@@ -50,44 +50,29 @@
                 changeMdlTextField(dinnerField, tripDuration + 1);                
             }
 
-            depDateField.change(dateChangeHandler);
-            retDateField.change(dateChangeHandler);
+            submitButton.setAttribute('type', 'button');
+            depDateField.addEventListener('change', dateChangeHandler);
+            retDateField.addEventListener('change', dateChangeHandler);
 
-            submitButton.click(() => {
-                const formElements =$("#advance-form input[type=text]");
-                let data = {}; // FIXME to const
+            submitButton.addEventListener('click', () => {
+                const formElements = document.querySelectorAll('#advance-form input[type=text]');
+                const data = {}; 
                 let errorFlag = false;
                 
                 for (element of formElements) {
                     if (element.value == "") {
                         alert("Error! All fields must have a value.");
                         errorFlag = true;
-                        break;
+                        break; 
                     }
                     data[element.id] = element.value;
                 }
 
+                data["email_me"] = document.querySelector('input[name="email_me"]:checked').value;
+
                 if (!errorFlag) {
                     console.log("JSON submitted => " + JSON.stringify(data));
-                    submitButton.prop('disabled', 1);
-
-                    // let fakeData = {
-                    //     "full_name":"James McNeil",
-                    //     "phone_num":"613.888.9999",
-                    //     "dep_date":"2017-04-01",
-                    //     "ret_date":"2017-05-02",
-                    //     "trip_purpose":"Advance PM's visit to Barrie",
-                    //     "travel_city":"Toronto",
-                    //     "num_breakfasts":"3",
-                    //     "num_lunches":"3",
-                    //     "num_dinners":"2",
-                    //     "num_incidentals":"1",
-                    //     "hotel_cost":"150",
-                    //     "hotel_nights":"2",
-                    //     "rental_amount":"160.99",
-                    //     "transport_amount":"60"
-                    // } 
-                    // data = fakeData; // FIXME
+                    submitButton.setAttribute('disabled', 1);
 
                     const request = new XMLHttpRequest();
                     request.open("POST", "/api/advance_form", true);
@@ -106,10 +91,9 @@
                         } else {
                             alert('Something went wront on the server (' + 
                                 request.status + ') - check your input and try again.');
-                            submitButton.prop('disabled', 0);    
+                            submitButton.setAttribute('disabled', 0);    
                         }
                     });
-
                     request.send(JSON.stringify(data));
                 }
             });
