@@ -8,6 +8,8 @@ from email.mime.multipart import MIMEMultipart
 import boto3
 from flask import Flask
 from flask import send_file, render_template, request
+from raven import Client
+from raven.transport.http import HTTPTransport
 from raven.contrib.flask import Sentry
 
 import settings
@@ -20,12 +22,13 @@ app = Flask(__name__)
 app.config.from_object("settings")
 sentry = None
 
-if app.config['SENTRY_DSN']:
+if app.config.get('SENTRY_DSN'):
   sentry = Sentry(app, 
-    dsn=app.config['SENTRY_DSN'], 
+    client=Client(app.config['SENTRY_DSN'], transport=HTTPTransport),
     logging=True, 
     level=logging.ERROR,
   )
+
   app.config['SENTRY_CONFIG'] = {
     'release': os.getenv('UP_COMMIT'),
   }
