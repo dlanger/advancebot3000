@@ -1,6 +1,17 @@
 {
   "name": "advance-form",
-  "profile": "default",
+  "lambda": {
+    "policy": [
+      {
+        "Effect": "Allow",
+        "Resource": "*",
+        "Action": [
+          "ses:SendEmail",
+          "ses:SendRawEmail"
+        ]
+      }
+    ]
+  },
   "regions": [
     "ca-central-1"
   ],
