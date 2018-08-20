@@ -1,3 +1,5 @@
+import os
+import logging
 from datetime import date, datetime
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
@@ -19,7 +21,14 @@ app.config.from_object("settings")
 sentry = None
 
 if app.config['SENTRY_DSN']:
-  sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
+  sentry = Sentry(app, 
+    dsn=app.config['SENTRY_DSN'], 
+    logging=True, 
+    level=logging.ERROR,
+  )
+  app.config['SENTRY_CONFIG'] = {
+    'release': os.getenv('UP_COMMIT'),
+  }
 
 @app.route("/", methods=['GET'])
 def ui():
