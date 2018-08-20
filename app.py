@@ -52,8 +52,6 @@ def renter_advance_form():
   rendered_form = form.render()
   filename = _generate_filename(form_data['travel_city'])
 
-  app.logger.error(form_data)
-
   if form_data['email_me'] == '1':
     recipient = _guess_email_address(form_data['full_name'])
     if recipient:
@@ -95,7 +93,4 @@ def _email_form(rendered_form, recipient_email, filename, travel_city):
     RawMessage={'Data': msg.as_string()},
     Source=msg['From'],
     Destinations=(msg['To'],),
-  )
-
-  app.logger.error('SENDING DONE ' + str(resp))
-    
+  )   
