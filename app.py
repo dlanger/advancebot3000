@@ -24,14 +24,13 @@ sentry = None
 
 if app.config.get('SENTRY_DSN'):
   sentry = Sentry(app, 
-    client=Client(app.config['SENTRY_DSN'], transport=HTTPTransport),
+    client=Client(
+      app.config['SENTRY_DSN'], 
+      transport=HTTPTransport,
+      release=os.getenv('UP_COMMIT')),
     logging=True, 
     level=logging.ERROR,
   )
-
-  app.config['SENTRY_CONFIG'] = {
-    'release': os.getenv('UP_COMMIT'),
-  }
 
 @app.route("/", methods=['GET'])
 def ui():
