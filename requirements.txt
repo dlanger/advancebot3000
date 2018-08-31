@@ -1,6 +1,6 @@
 docx-mailmerge==0.4.0
 lxml==4.2.4
-Flask==0.12.2
+Flask==0.12.3
 attrs==18.1.0
 raven[flask]
 boto3==1.7.75
